@@ -1,27 +1,18 @@
 using Database;
-using Domain;
 using MediatR;
 
 namespace App.Users
 {
-    public class Create
+    public class Delete
     {
         public class Command : IRequest
         {
-            public User User { get; set; }
-
-
+            public Guid Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            private string _userSalt = Encryption.Encryption.CreateSalt(10);
-
-            private string GetUserPasswordHashed(User user)
-            {
-                return Encryption.Encryption.GenerateSHA256Hash(user.Password, _userSalt);
-            }
 
             public Handler(DataContext context)
             {
@@ -30,10 +21,9 @@ namespace App.Users
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                request.User.Password = GetUserPasswordHashed(request.User);
-                request.User.Salt = _userSalt;
+                var user = await _context.Users.FindAsync(request.Id);
 
-                _context.Users.Add(request.User);
+                _context.Remove(user);
 
                 await _context.SaveChangesAsync();
 
