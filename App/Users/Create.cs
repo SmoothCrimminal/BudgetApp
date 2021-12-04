@@ -9,8 +9,6 @@ namespace App.Users
         public class Command : IRequest
         {
             public User User { get; set; }
-
-
         }
 
         public class Handler : IRequestHandler<Command>
@@ -33,12 +31,18 @@ namespace App.Users
                 request.User.Password = GetUserPasswordHashed(request.User);
                 request.User.Salt = _userSalt;
 
-                _context.Users.Add(request.User);
+                if (request.User.CreationDate == null)
+                {
+                    request.User.CreationDate = DateTime.Now;
+                }
+
+                await _context.Users.AddAsync(request.User);
 
                 await _context.SaveChangesAsync();
 
-                return Unit.Value; // the same as retun void (nothing)
+                return Unit.Value;
             }
+
         }
     }
 }

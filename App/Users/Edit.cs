@@ -11,7 +11,7 @@ namespace App.Users
             public User User { get; set; }
         }
 
-         public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
 

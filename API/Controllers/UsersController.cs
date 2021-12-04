@@ -10,20 +10,37 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetUser([FromHeader] string username, [FromHeader] string password)
+        public async Task<IActionResult> GetUserValidationResult([FromHeader] string username, [FromHeader] string password)
         {
-            Console.WriteLine(username);
-            var result = await Mediator.Send(new Get.Query { Username = username, Password = password });
+            var result = await Mediator.Send(new GetValidation.Query { Username = username, Password = password });
             if (result)
                 return Ok();
 
             return NotFound();
         }
 
+        [HttpGet("{username}")]
+        public async Task<User> GetUserInfo(string username)
+        {
+            var user = await Mediator.Send(new GetUserInfo.Query { Username = username });
+            if (user == null)
+            {
+                return user;
+            }
+
+            return user;
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            return Ok(await Mediator.Send(new Create.Command { User = user }));
+            var result = await Mediator.Send(new Validate.Query { User = user });
+            if (!result)
+            {
+                return Ok(await Mediator.Send(new Create.Command { User = user }));
+            }
+
+            return Unauthorized();
         }
 
         [HttpPut("{id}")]

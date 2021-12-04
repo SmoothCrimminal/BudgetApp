@@ -4,7 +4,7 @@ using MediatR;
 
 namespace App.Users
 {
-    public class Get
+    public class GetValidation
     {
         public class Query : IRequest<bool>
         {
