@@ -9,10 +9,15 @@ namespace API.Controllers
     public class UsersController : BaseApiController
     {
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        [HttpGet]
+        public async Task<IActionResult> GetUser([FromHeader] string username, [FromHeader] string password)
         {
-            return await Mediator.Send(new Get.Query { Id = id });
+            Console.WriteLine(username);
+            var result = await Mediator.Send(new Get.Query { Username = username, Password = password });
+            if (result)
+                return Ok();
+
+            return NotFound();
         }
 
         [HttpPost]
