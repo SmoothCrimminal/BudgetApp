@@ -1,32 +1,38 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Navbar from '../../Components/Navbar'
+import useAuth from '../../useAuth'
 
 export default function Login() {
 
     const navigate = useNavigate()
     const { register, handleSubmit } = useForm();
-
+    const { login } = useAuth();
+    const { state } = useLocation();
     const [info, setInfo] = useState('');
 
-    const onSubmit = (data) => {
+    const onSubmit = data => {
         const requestOptions = {
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'username': data.login, 'password': data.password },
         };
-        fetch("http://192.168.1.25:5000/Users/", requestOptions)
+
+        //Do testów
+        login(data.login, "cebula").then(() => {
+            navigate(state?.path || "/home");
+        });
+
+        fetch("http://" + process.env.REACT_APP_IP + ":5000/Users/", requestOptions)
             .then((response) => {
-                console.log(response)
                 if (response.status !== 200) {
                     setInfo("NIEPOPRAWNY LOGIN LUB HASŁO")
                     return
                 }
-                localStorage.setItem("token", "cebula");
-                localStorage.setItem("login", data.login);
-                navigate('/home');
-                window.location.reload()
+                console.log("a")
+                login(data.login, "cebula").then(() => {
+                    navigate(state?.path || "/home");
+                });
             }, (error) => {
                 if (error) {
                     setInfo("BLAD SERWERA")
@@ -37,7 +43,6 @@ export default function Login() {
 
     return (
         <div>
-            <Navbar />
             <h1>LOGIN</h1>
             <h2>{info}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -51,7 +56,6 @@ export default function Login() {
                 </div>
                 <button type="submit" className="btn">Login</button>
             </form>
-            <li><Link to="register">Register</Link></li>
         </div>
     )
 }

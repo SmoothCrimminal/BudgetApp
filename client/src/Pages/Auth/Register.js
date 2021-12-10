@@ -1,8 +1,7 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Navbar from '../../Components/Navbar'
 
 export default function Register() {
 
@@ -18,8 +17,12 @@ export default function Register() {
             password: form_data.password,
             budget: parseFloat(form_data.budget)
         };
-        console.log(JSON.stringify(data))
-        fetch("http://192.168.1.25:5000/Users/", {
+        
+        // Do testów
+        navigate('/login');
+
+        
+        fetch("http://" + process.env.REACT_APP_IP + ":5000/Users/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,7 +30,6 @@ export default function Register() {
             body: JSON.stringify(data),
         })
             .then((response) => {
-                console.log(response)
                 switch (response.status) {
                     case 401:
                         setInfo("USER TAKEN")
@@ -38,10 +40,7 @@ export default function Register() {
                         setInfo("BŁAD SERWERA")
                         return
                 }
-                localStorage.setItem("token", "cebula");
-                localStorage.setItem("login", data.login);
-                navigate('/home');
-                window.location.reload()
+                navigate('/login');
             }, (error) => {
                 if (error) {
                     console.log(error)
@@ -51,7 +50,6 @@ export default function Register() {
 
     return (
         <div>
-            <Navbar />
             <h1>REGISTER</h1>
             <h2>{info}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +67,6 @@ export default function Register() {
                 </div>
                 <button type="submit" className="btn">Register</button>
             </form>
-            <li><Link to="/login">Login</Link></li>
         </div>
     )
 }
