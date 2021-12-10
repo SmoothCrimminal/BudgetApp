@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../Components/Navbar'
+import useAuth from '../useAuth'
 
 export default function Profile() {
 
-    const login = localStorage.getItem("login");
     const [user, setUser] = useState({ id: '', username: '', password: '', budget: '', creationDate: '' });
+    const { username } = useAuth();
 
     useEffect(() => {
-        fetch("http://192.168.1.25:5000/Users/" + login)
-            .then((response) => { response.json() },
+        fetch("http://" + process.env.REACT_APP_IP + ":5000/Users/" + username)
+            .then((response) => response.json(),
                 (error) => {
                     if (error) {
                         console.log(error)
                     }
                 })
-            .then((data) => {
-                return data;
-            })
-            .then((data) => setUser(data));
-    }, [login]);
+        // .then((data) => {setUser(data)});
+    }, [username]);
+
+    const load = <div class="animated-background"></div>
 
     return (
         <>
-            <Navbar />
             {user ? user.id ? <>
-                <h1>PROFILE {login}</h1>
-                <p>NAME: {user.username}</p>
-                <p>BUDGET: {user.budget}</p>
-                <p>CREATION DATE: {user.creationDate}</p>
-            </> : "LOADING DATA" : "BLAD"}
+                <h1>PROFILE</h1>
+                <p>NAME: <br /> {user.username}</p>
+                <p>BUDGET:<br />  {user.budget}</p>
+                <p>CREATION DATE: <br /> {user.creationDate}</p>
+            </> : <>
+                <h1>PROFILE</h1>
+                <p>NAME: {load}</p>
+                <p>BUDGET: {load}</p>
+                <p>CREATION DATE: {load}</p>
+            </> : "BLAD"}
         </>
     )
 }
