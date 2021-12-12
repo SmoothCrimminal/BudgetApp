@@ -1,7 +1,6 @@
 import Plot from 'react-plotly.js';
-import React from 'react';
 import Forms from '../Components/Form'
-import { useCallback, useState} from "react";
+import { useCallback, useState } from "react";
 
 export default function App() {
 

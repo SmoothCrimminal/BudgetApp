@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAuth from '../useAuth'
 
 export default function Profile() {
@@ -17,7 +17,7 @@ export default function Profile() {
         // .then((data) => {setUser(data)});
     }, [username]);
 
-    const load = <div class="animated-background"></div>
+    const load = <div className="animated-background"></div>
 
     return (
         <>
