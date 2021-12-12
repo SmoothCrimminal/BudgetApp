@@ -1,4 +1,3 @@
-import * as React from "react";
 import './Styles/App.css';
 import {
   Routes,
@@ -17,8 +16,8 @@ import Profile from './Pages/Profile'
 import { useState } from "react";
 import BudgetApp from './Pages/BudgetApp'
 
-function RequireAuth({ children }) {
-  const { authed } = useAuth();
+function RequireAuth({ children }: any) {
+  const { authed }: any = useAuth();
   const location = useLocation();
 
   return authed === true ? (
@@ -33,7 +32,7 @@ export default function App() {
   const [error, setError] = useState(false)
   const location = useLocation();
 
-  //Check if server is woring
+  //Check if server is working
   fetch("http://" + process.env.REACT_APP_IP + ":5000/")
     .then((response) => { response.json() },
       (error) => {
@@ -45,7 +44,7 @@ export default function App() {
   return (
 
     <>
-      {error ? <h1> SERWER NIE DZIALA </h1> :
+      {error ? <h1> SERVER IS NOT WORKING </h1> :
         <div>
           <Navbar />
           <Routes>

@@ -1,7 +1,12 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
+type RegisterData = {
+    username: string,
+    password: string,
+    budget: string
+}
 
 export default function Register() {
 
@@ -10,18 +15,18 @@ export default function Register() {
     const [info, setInfo] = useState('');
     const { register, handleSubmit } = useForm();
 
-    const onSubmit = (form_data) => {
+    const onSubmit = (form_data: RegisterData) => {
 
         const data = {
-            username: form_data.login,
+            username: form_data.username,
             password: form_data.password,
             budget: parseFloat(form_data.budget)
         };
-        
+
         // Do testów
         navigate('/login');
 
-        
+
         fetch("http://" + process.env.REACT_APP_IP + ":5000/Users/", {
             method: 'POST',
             headers: {
@@ -37,7 +42,7 @@ export default function Register() {
                     case 200:
                         break;
                     default:
-                        setInfo("BŁAD SERWERA")
+                        setInfo("SERVER ERROR")
                         return
                 }
                 navigate('/login');
@@ -54,8 +59,8 @@ export default function Register() {
             <h2>{info}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-control">
-                    <label htmlFor="text">Login</label>
-                    <input required type="text" {...register("login")} placeholder="Enter text..." />
+                    <label htmlFor="text">Username</label>
+                    <input required type="text" {...register("username")} placeholder="Enter text..." />
                 </div>
                 <div className="form-control">
                     <label htmlFor="text">Password</label>

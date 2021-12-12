@@ -1,10 +1,14 @@
-import React from 'react'
 import { useForm } from "react-hook-form";
 
-export default function Forms({ parentCallback }) {
+type Transaction = {
+  text: string,
+  amount: number
+}
+
+export default function Forms({ parentCallback }: any) {
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: Transaction) => {
     parentCallback(data.text, data.amount);
   }
 

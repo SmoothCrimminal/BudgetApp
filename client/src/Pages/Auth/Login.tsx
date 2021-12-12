@@ -1,8 +1,12 @@
-import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from '../../useAuth'
+
+type LoginData = {
+    username: string,
+    password: string
+}
 
 export default function Login() {
 
@@ -12,14 +16,14 @@ export default function Login() {
     const { state } = useLocation();
     const [info, setInfo] = useState('');
 
-    const onSubmit = data => {
+    const onSubmit = (data: LoginData) => {
         const requestOptions = {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'username': data.login, 'password': data.password },
+            headers: { 'Content-Type': 'application/json', 'username': data.username, 'password': data.password },
         };
 
         //Do testów
-        login(data.login, "cebula").then(() => {
+        login(data.username, "cebula").then(() => {
             navigate(state?.path || "/home");
         });
 
@@ -29,8 +33,7 @@ export default function Login() {
                     setInfo("NIEPOPRAWNY LOGIN LUB HASŁO")
                     return
                 }
-                console.log("a")
-                login(data.login, "cebula").then(() => {
+                login(data.username, "cebula").then(() => {
                     navigate(state?.path || "/home");
                 });
             }, (error) => {
@@ -43,18 +46,18 @@ export default function Login() {
 
     return (
         <div>
-            <h1>LOGIN</h1>
+            <h1>LOG IN</h1>
             <h2>{info}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-control">
-                    <label htmlFor="text">Login</label>
-                    <input {...register("login")} required type="text" placeholder="Enter text..." />
+                    <label htmlFor="text">Username</label>
+                    <input {...register("username")} required type="text" placeholder="Enter text..." />
                 </div>
                 <div className="form-control">
                     <label htmlFor="text">Password</label>
                     <input {...register("password")} required type="password" placeholder="Enter password..." />
                 </div>
-                <button type="submit" className="btn">Login</button>
+                <button type="submit" className="btn">Log in</button>
             </form>
         </div>
     )
