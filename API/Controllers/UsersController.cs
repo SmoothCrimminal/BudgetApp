@@ -69,10 +69,10 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{username}")]
-        public async Task<ActionResult<UserDTO>> GetCurrentUserInfo(string username)
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> GetCurrentUserInfo()
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
 
             return CreateUserObject(user);
         }

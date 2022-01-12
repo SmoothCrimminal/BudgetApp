@@ -7,7 +7,7 @@ namespace Domain
     public class User : IdentityUser
     {
         public decimal Budget { get; set; }
-        public DateTime CreationDate { get; set; }
-        
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Database;
 using Domain;
@@ -46,6 +47,13 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(o =>
+                    {
+                        o.Listen(System.Net.IPAddress.Loopback, 5000, lo =>
+                        {
+                            lo.UseHttps(@"C:\Users\lataw\OneDrive\Pulpit\testCert.pfx", "123");
+                        });
+                    }).UseUrls("https://localhost:5000");
                 });
     }
 }
